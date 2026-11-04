@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SWE II Prep Checklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one narrow study column. Header with overall progress, day tabs, then the selected day's blocks as a timed checklist. */
+:root {
+  --bg: #eef2f4;
+  --surface: #ffffff;
+  --ink: #15212b;
+  --muted: #5a6875;
+  --line: #d8e0e6;
+  --accent: #17766b;
+  --accent-ink: #ffffff;
+  --accent-soft: #dcefeb;
+  --warn: #a3471d;
+  --code-bg: #e8eef1;
+  --font-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1418; --surface: #151d23; --ink: #e4ebf0; --muted: #94a3af; --line: #26323b;
+    --accent: #4cc2ae; --accent-ink: #0b1714; --accent-soft: #163330; --warn: #f08a5d; --code-bg: #1e2830;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1418; --surface: #151d23; --ink: #e4ebf0; --muted: #94a3af; --line: #26323b;
+  --accent: #4cc2ae; --accent-ink: #0b1714; --accent-soft: #163330; --warn: #f08a5d; --code-bg: #1e2830;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 15px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 56px;
+}
+.wrap { max-width: 800px; margin: 0 auto; display: grid; gap: 20px; }
+a { color: var(--accent); text-underline-offset: 2px; }
+code { font-family: var(--font-mono); font-size: 0.86em; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+button, input, textarea, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.top { display: grid; gap: 12px; }
+.eyebrow { margin: 0; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+h1 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: clamp(28px, 6vw, 40px); line-height: 1.1; text-wrap: balance; }
+.overall { display: grid; gap: 6px; }
+.bar { height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; }
+.bar > span { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 99px; transition: width .3s ease; }
+.overall p { margin: 0; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; }
+.switch { display: inline-flex; gap: 8px; align-items: center; font-size: 14px; cursor: pointer; user-select: none; }
+.switch input { width: 16px; height: 16px; accent-color: var(--accent); }
+.status { margin-left: auto; font-size: 13px; color: var(--muted); }
+.status.err { color: var(--warn); }
+
+.tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+.tab {
+  flex: 0 0 auto; min-width: 104px; display: grid; gap: 3px; text-align: left;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 10px 12px; cursor: pointer;
+}
+.tab:hover { border-color: var(--accent); }
+.tab.on { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.tab-t { font-family: var(--font-display); font-weight: 600; font-size: 16px; }
+.tab-d { font-size: 12px; color: var(--muted); }
+.mini { height: 4px; background: var(--line); border-radius: 99px; overflow: hidden; margin-top: 4px; }
+.mini > span { display: block; height: 100%; background: var(--accent); }
+.tab-c { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.tab.add { border-style: dashed; color: var(--accent); font-weight: 600; place-content: center; }
+
+.day { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px clamp(16px, 4vw, 28px); display: grid; gap: 22px; }
+.day-head { display: grid; gap: 10px; }
+.day-head h2 { margin: 0; font-family: var(--font-display); font-size: clamp(21px, 4.4vw, 26px); line-height: 1.2; text-wrap: balance; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 14px; color: var(--muted); font-size: 14px; align-items: center; }
+.meta .when { font-family: var(--font-mono); font-size: 13px; color: var(--ink); background: var(--accent-soft); padding: 2px 8px; border-radius: 6px; }
+.head-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.note { margin: 0; padding: 10px 14px; background: var(--accent-soft); border-radius: 8px; font-size: 14px; }
+
+.sec { display: grid; gap: 6px; }
+.sec-h { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+.sec-h h3 { margin: 0; font-size: 13px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.sec-h .count { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+ul.items { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.item { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; gap: 10px; align-items: start; padding: 8px 6px; border-radius: 8px; }
+.item:hover { background: color-mix(in srgb, var(--accent-soft) 45%, transparent); }
+.item.indent { margin-left: 30px; padding-block: 5px; }
+.item input[type="checkbox"] { width: 19px; height: 19px; margin: 3px 0 0; accent-color: var(--accent); cursor: pointer; }
+.item .body { min-width: 0; display: grid; gap: 1px; cursor: pointer; }
+.item .time { font-family: var(--font-mono); font-size: 12px; color: var(--accent); font-weight: 500; font-variant-numeric: tabular-nums; }
+.item .text { overflow-wrap: anywhere; }
+.item.done .text { color: var(--muted); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--muted) 60%, transparent); }
+.item.done .time { color: var(--muted); }
+.item.brk { grid-template-columns: 26px minmax(0, 1fr) auto; color: var(--muted); font-size: 14px; }
+.item.brk .dot { width: 19px; height: 19px; display: grid; place-items: center; margin-top: 2px; }
+.item.brk .dot::before { content: ""; width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid var(--muted); }
+.all-done { color: var(--muted); font-size: 14px; padding: 6px; margin: 0; }
+
+.ctrls { display: flex; gap: 4px; }
+.btn {
+  border: 1px solid var(--line); background: var(--surface); border-radius: 7px; padding: 5px 11px;
+  font-size: 13px; cursor: pointer; line-height: 1.3;
+}
+.btn:hover { border-color: var(--accent); }
+.btn.icon { padding: 3px 8px; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.btn.danger { color: var(--warn); }
+.btn.danger.armed { background: var(--warn); border-color: var(--warn); color: var(--surface); }
+.btn.ghost { border-style: dashed; color: var(--accent); font-weight: 600; justify-self: start; }
+
+form.edit { display: grid; gap: 10px; padding: 14px; border: 1px solid var(--accent); border-radius: var(--radius); background: var(--bg); }
+form.edit label { display: grid; gap: 4px; font-size: 13px; color: var(--muted); font-weight: 500; }
+form.edit .row { display: flex; flex-wrap: wrap; gap: 10px; }
+form.edit .row > label { flex: 1 1 160px; }
+form.edit input[type="text"], form.edit textarea, form.edit select {
+  width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); color: var(--ink); font-size: 14px;
+}
+form.edit textarea { min-height: 84px; resize: vertical; }
+form.edit .inline { display: flex; align-items: center; gap: 8px; color: var(--ink); }
+form.edit .inline input { accent-color: var(--accent); width: 16px; height: 16px; }
+form.edit .hint { margin: 0; font-size: 12px; color: var(--muted); }
+form.edit .acts { display: flex; flex-wrap: wrap; gap: 8px; }
+form.edit .acts .spacer { flex: 1; }
+
+.empty { background: var(--surface); border: 1px dashed var(--line); border-radius: 14px; padding: 28px; display: grid; gap: 10px; justify-items: start; }
+.empty h2 { margin: 0; font-family: var(--font-display); font-size: 22px; }
+.empty p { margin: 0; color: var(--muted); }
+.celebrate { margin: 0; padding: 12px 14px; border-radius: 8px; background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.foot { color: var(--muted); font-size: 12px; margin: 0; }
+
+@media (max-width: 520px) {
+  .item.indent { margin-left: 18px; }
+  .status { margin-left: 0; width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">15-week SWE II plan · Pre-start week</p>
+    <h1>SWE II Prep Checklist</h1>
+    <div class="overall">
+      <div class="bar" aria-hidden="true"><span id="ov-fill"></span></div>
+      <p id="ov-text">Loading your checklist…</p>
+    </div>
+    <div class="toolbar">
+      <label class="switch" for="opt-hide"><input type="checkbox" id="opt-hide"> Hide completed</label>
+      <label class="switch" for="opt-edit"><input type="checkbox" id="opt-edit"> Edit mode</label>
+      <button type="button" class="btn" id="btn-export">Export progress</button>
+      <button type="button" class="btn" id="btn-import">Import progress</button>
+      <input type="file" id="file-import" accept="application/json,.json" hidden>
+      <span id="status" class="status" role="status" aria-live="polite"></span>
+    </div>
+  </header>
+  <nav id="tabs" class="tabs" aria-label="Days"></nav>
+  <main id="main">
+    <section class="empty">
+      <h2>Loading your days…</h2>
+      <p>Your study days and tasks appear here. Tick a box to mark a task done. Turn on Edit mode to add, change or remove tasks.</p>
+    </section>
+  </main>
+  <p class="foot">Your progress is saved in this browser. Use Export and Import to move it to another device. Formatting in task text: **bold**, *italic*, `code` and [link text](https://example.com).</p>
+</div>
+
+<script>
+(() => {
+  const $ = (s) => document.querySelector(s);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  function md(s) {
+    let h = esc(s);
+    const codes = [];
+    h = h.replace(/`([^`]+)`/g, (m, c) => { codes.push(c); return "\u0000" + (codes.length - 1) + "\u0000"; });
+    h = h.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    h = h.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    h = h.replace(/\*([^*]+)\*/g, "<em>$1</em>");
+    h = h.replace(/\u0000(\d+)\u0000/g, (m, i) => "<code>" + codes[+i] + "</code>");
+    return h;
+  }
+  const uid = () => Math.random().toString(36).slice(2, 10);
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem("prep:" + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+    set(k, v) { try { localStorage.setItem("prep:" + k, JSON.stringify(v)); } catch {} },
+  };
+  const todayISO = () => { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); };
+
+  const state = {
+    lists: [], loaded: false, sel: null, selInit: false,
+    edit: store.get("edit", false), hideDone: store.get("hide", false),
+    editing: null, confirm: null, readOnly: false, db: null, deferred: false,
+  };
+  $("#opt-edit").checked = state.edit;
+  $("#opt-hide").checked = state.hideDone;
+
+  const getList = (id) => state.lists.find((l) => l.id === id);
+  const getSec = (l, sid) => l && l.sections.find((s) => s.id === sid);
+  function prog(lists) {
+    let total = 0, done = 0;
+    for (const l of [].concat(lists)) for (const s of l.sections || []) for (const it of s.items || []) {
+      if (it.kind === "break") continue; total++; if (it.done) done++;
+    }
+    return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
+  }
+
+  // ---------- saving ----------
+  const pending = new Map(), inflight = new Set(), deleted = new Set();
+  function setStatus(text, err) { const el = $("#status"); el.textContent = text; el.classList.toggle("err", !!err); }
+  function strip(l) { const { id, ...rest } = l; return JSON.parse(JSON.stringify(rest)); }
+  function save(l) { pending.set(l.id, strip(l)); flush(l.id); }
+  async function flush(id) {
+    if (inflight.has(id) || !pending.has(id) || !state.db) return;
+    const data = pending.get(id); pending.delete(id); inflight.add(id);
+    setStatus("Saving…");
+    try { await state.db.doc("lists/" + id).set(data); }
+    catch (e) { saveError(e); }
+    finally {
+      inflight.delete(id);
+      if (pending.has(id)) flush(id);
+      else if (!inflight.size && !$("#status").classList.contains("err")) setStatus("All changes saved");
+    }
+  }
+  function saveError(e) {
+    const code = e && e.code;
+    if (code === "invalid_argument") { state.readOnly = true; setStatus("You can view this checklist but not change it.", true); }
+    else if (code === "quota_exceeded") setStatus("Storage is full. Delete some old days to save changes.", true);
+    else setStatus("Couldn't save the last change. Check your connection, then try again.", true);
+  }
+  async function removeList(id) {
+    deleted.add(id); pending.delete(id);
+    state.lists = state.lists.filter((l) => l.id !== id);
+    try { await state.db.doc("lists/" + id).delete(); setStatus("Day deleted"); } catch (e) { saveError(e); }
+  }
+  function mutate(listId, fn) {
+    if (state.readOnly) return;
+    const l = getList(listId); if (!l) return;
+    fn(l); save(l); render();
+  }
+
+  // ---------- rendering ----------
+  function pickDefault() {
+    const t = todayISO();
+    const m = state.lists.find((l) => (l.isoDates || []).includes(t));
+    if (m) return m.id;
+    const saved = store.get("sel", null);
+    if (saved && getList(saved)) return saved;
+    const inc = state.lists.find((l) => prog(l).pct < 100);
+    return (inc || state.lists[0] || {}).id || null;
+  }
+
+  function renderTabs() {
+    const tabs = state.lists.map((l) => {
+      const p = prog(l), on = l.id === state.sel;
+      return `<button class="tab${on ? " on" : ""}" data-action="select" data-list="${l.id}" aria-pressed="${on}">
+        <span class="tab-t">${esc(l.short || l.title)}</span>
+        <span class="tab-d">${esc(l.dateLabel || " ")}</span>
+        <span class="mini"><span style="width:${p.pct}%"></span></span>
+        <span class="tab-c">${p.total ? p.done + " of " + p.total : "No tasks"}</span>
+      </button>`;
+    }).join("");
+    $("#tabs").innerHTML = tabs + (state.edit && state.loaded && state.db ? `<button class="tab add" data-action="add-day">+ Add day</button>` : "");
+  }
+
+  function confirmBtn(key, label, armedLabel, attrs) {
+    const armed = state.confirm === key;
+    return `<button type="button" class="btn danger${armed ? " armed" : ""}" data-action="confirm" data-key="${esc(key)}" ${attrs}>${armed ? armedLabel : label}</button>`;
+  }
+
+  function itemForm(l, s, it) {
+    const isNew = !it;
+    it = it || { kind: "task", time: "", text: "", indent: 0 };
+    return `<li><form class="edit" data-form="item" data-list="${l.id}" data-sec="${s.id}" data-item="${isNew ? "" : it.id}">
+      <div class="row">
+        <label for="ed-time">Time (optional)<input type="text" id="ed-time" value="${esc(it.time)}" placeholder="7:00–7:15 PM"></label>
+        <label for="ed-kind">Type<select id="ed-kind"><option value="task"${it.kind !== "break" ? " selected" : ""}>Task with a checkbox</option><option value="break"${it.kind === "break" ? " selected" : ""}>Break (no checkbox)</option></select></label>
+      </div>
+      <label for="ed-text">Task<textarea id="ed-text" required placeholder="What needs doing?">${esc(it.text)}</textarea></label>
+      <p class="hint">You can use **bold**, *italic*, \`code\` and [link text](https://…).</p>
+      <label class="inline" for="ed-indent"><input type="checkbox" id="ed-indent"${it.indent ? " checked" : ""}> Show as a sub-task (indented)</label>
+      <div class="acts">
+        <button type="submit" class="btn primary">${isNew ? "Add task" : "Save task"}</button>
+        <button type="button" class="btn" data-action="cancel">Cancel</button>
+        <span class="spacer"></span>
+        ${isNew ? "" : confirmBtn("item:" + it.id, "Delete task", "Click again to delete", `data-do="del-item" data-list="${l.id}" data-sec="${s.id}" data-item="${it.id}"`)}
+      </div>
+    </form></li>`;
+  }
+
+  function itemRow(l, s, it, i, n) {
+    const ed = state.edit;
+    const ctrls = ed ? `<div class="ctrls">
+        <button type="button" class="btn icon" data-action="move" data-dir="-1" data-list="${l.id}" data-sec="${s.id}" data-item="${it.id}" aria-label="Move up"${i === 0 ? " disabled" : ""}>↑</button>
+        <button type="button" class="btn icon" data-action="move" data-dir="1" data-list="${l.id}" data-sec="${s.id}" data-item="${it.id}" aria-label="Move down"${i === n - 1 ? " disabled" : ""}>↓</button>
+        <button type="button" class="btn" data-action="edit-item" data-list="${l.id}" data-sec="${s.id}" data-item="${it.id}">Edit</button>
+      </div>` : "<span></span>";
+    const time = it.time ? `<span class="time">${esc(it.time)}</span>` : "";
+    const cls = "item" + (it.indent ? " indent" : "");
+    if (it.kind === "break") {
+      return `<li class="${cls} brk"><span class="dot" aria-hidden="true"></span><div class="body">${time}<span class="text">${md(it.text || "Break")}</span></div>${ctrls}</li>`;
+    }
+    const cid = "cb-" + it.id;
+    return `<li class="${cls}${it.done ? " done" : ""}">
+      <input type="checkbox" id="${cid}" data-action="toggle" data-list="${l.id}" data-sec="${s.id}" data-item="${it.id}"${it.done ? " checked" : ""}${state.readOnly ? " disabled" : ""}>
+      <label class="body" for="${cid}">${time}<span class="text">${md(it.text)}</span></label>
+      ${ctrls}
+    </li>`;
+  }
+
+  function renderDay(l) {
+    const p = prog(l), ed = state.edit, E = state.editing;
+    let head;
+    if (E && E.type === "day" && E.list === l.id) {
+      head = `<form class="edit" data-form="day" data-list="${l.id}">
+        <label for="dy-title">Day title<input type="text" id="dy-title" required value="${esc(l.title)}"></label>
+        <div class="row">
+          <label for="dy-short">Tab label<input type="text" id="dy-short" value="${esc(l.short)}" placeholder="Mon"></label>
+          <label for="dy-date">Date label<input type="text" id="dy-date" value="${esc(l.dateLabel)}" placeholder="Nov 9"></label>
+          <label for="dy-window">Study time<input type="text" id="dy-window" value="${esc(l.window)}" placeholder="7:00–10:00 PM"></label>
+        </div>
+        <label for="dy-iso">Calendar dates, so the page opens on today (YYYY-MM-DD, comma-separated)<input type="text" id="dy-iso" value="${esc((l.isoDates || []).join(", "))}" placeholder="2026-11-09"></label>
+        <label for="dy-note">Note shown at the top (optional)<textarea id="dy-note">${esc(l.note)}</textarea></label>
+        <div class="acts">
+          <button type="submit" class="btn primary">Save day</button>
+          <button type="button" class="btn" data-action="cancel">Cancel</button>
+          <span class="spacer"></span>
+          ${confirmBtn("day:" + l.id, "Delete day", "Click again to delete this day", `data-do="del-day" data-list="${l.id}"`)}
+        </div>
+      </form>`;
+    } else {
+      head = `<div class="day-head">
+        <h2>${esc(l.title)}</h2>
+        <div class="meta">${l.window ? `<span class="when">${esc(l.window)}</span>` : ""}${l.dateLabel ? `<span>${esc(l.dateLabel)}</span>` : ""}<span>${p.done} of ${p.total} done</span></div>
+        <div class="bar" aria-hidden="true"><span style="width:${p.pct}%"></span></div>
+        ${l.note ? `<p class="note">${md(l.note)}</p>` : ""}
+        ${state.readOnly ? "" : `<div class="head-actions">
+          ${ed ? `<button type="button" class="btn" data-action="edit-day" data-list="${l.id}">Edit day</button>` : ""}
+          ${p.done ? confirmBtn("reset:" + l.id, "Untick all", "Click again to untick all", `data-do="reset" data-list="${l.id}"`) : ""}
+        </div>`}
+      </div>`;
+    }
+
+    const secs = l.sections.map((s) => {
+      const sp = prog({ sections: [s] });
+      let h;
+      if (E && E.type === "sec" && E.sec === s.id) {
+        h = `<form class="edit" data-form="sec" data-list="${l.id}" data-sec="${s.id}">
+          <label for="sc-title">Section title<input type="text" id="sc-title" required value="${esc(s.title)}"></label>
+          <div class="acts">
+            <button type="submit" class="btn primary">Save section</button>
+            <button type="button" class="btn" data-action="cancel">Cancel</button>
+            <span class="spacer"></span>
+            ${confirmBtn("sec:" + s.id, "Delete section", "Click again to delete it and its tasks", `data-do="del-sec" data-list="${l.id}" data-sec="${s.id}"`)}
+          </div>
+        </form>`;
+      } else {
+        h = `<div class="sec-h"><h3>${esc(s.title)}</h3><span class="ctrls"><span class="count">${sp.total ? sp.done + "/" + sp.total : ""}</span>${ed ? `<button type="button" class="btn" data-action="edit-sec" data-list="${l.id}" data-sec="${s.id}">Rename</button>` : ""}</span></div>`;
+      }
+      const shown = s.items.filter((it) => ed || !state.hideDone || it.kind === "break" ? true : !it.done);
+      const visibleTasks = shown.filter((it) => it.kind !== "break");
+      let rows = "";
+      if (!ed && state.hideDone && sp.total && sp.done === sp.total) {
+        rows = `<p class="all-done">All ${sp.total} tasks in this section are done.</p>`;
+      } else {
+        rows = `<ul class="items">` + shown.map((it) => {
+          if (E && E.type === "item" && E.item === it.id) return itemForm(l, s, it);
+          return itemRow(l, s, it, s.items.indexOf(it), s.items.length);
+        }).join("") + (E && E.type === "item" && E.sec === s.id && !E.item ? itemForm(l, s, null) : "") + `</ul>`;
+        if (!s.items.length && !ed) rows = `<p class="all-done">No tasks yet. Turn on Edit mode to add one.</p>`;
+        if (visibleTasks.length === 0 && s.items.length && !ed && state.hideDone && !shown.length) rows = `<p class="all-done">Everything here is done.</p>`;
+      }
+      const add = ed && !(E && E.type === "item" && E.sec === s.id && !E.item)
+        ? `<button type="button" class="btn ghost" data-action="add-item" data-list="${l.id}" data-sec="${s.id}">+ Add task</button>` : "";
+      return `<section class="sec">${h}${rows}${add}</section>`;
+    }).join("");
+
+    const addSec = ed ? `<button type="button" class="btn ghost" data-action="add-sec" data-list="${l.id}">+ Add section</button>` : "";
+    const done = p.total && p.done === p.total ? `<p class="celebrate">Every task for this day is done. Nice work.</p>` : "";
+    return `<article class="day">${head}${done}${secs}${addSec}</article>`;
+  }
+
+  function render() {
+    if (state.editing && !document.querySelector("form.edit") && state.deferred) state.deferred = false;
+    const ov = prog(state.lists);
+    if (state.loaded) {
+      $("#ov-fill").style.width = ov.pct + "%";
+      $("#ov-text").textContent = ov.total ? `${ov.done} of ${ov.total} tasks done (${ov.pct}%)` : "No tasks yet";
+    }
+    renderTabs();
+    const main = $("#main");
+    if (!state.db) return;
+    if (!state.loaded) return;
+    if (!state.lists.length) {
+      main.innerHTML = `<section class="empty"><h2>No days yet</h2><p>Add your first study day, then add tasks to it.</p>${state.readOnly ? "" : `<button type="button" class="btn primary" data-action="add-day">+ Add day</button>`}</section>`;
+      return;
+    }
+    if (!state.selInit || !getList(state.sel)) { state.sel = pickDefault(); state.selInit = true; renderTabs(); }
+    main.innerHTML = renderDay(getList(state.sel));
+    const f = main.querySelector("form.edit input[type=text], form.edit textarea");
+    if (f && state.focusForm) { f.focus(); state.focusForm = false; }
+  }
+
+  function openEdit(e) { state.editing = e; state.confirm = null; state.focusForm = true; render(); }
+  function closeEdit() { state.editing = null; state.confirm = null; render(); }
+
+  // ---------- events ----------
+  document.addEventListener("click", (ev) => {
+    const b = ev.target.closest("[data-action]");
+    if (!b || b.tagName === "INPUT") return;
+    const a = b.dataset.action, d = b.dataset;
+    if (a !== "confirm") state.confirm = null;
+    if (a === "select") { state.sel = d.list; store.set("sel", d.list); state.editing = null; render(); return; }
+    if (a === "cancel") { closeEdit(); return; }
+    if (state.readOnly) return;
+    if (a === "edit-item") return openEdit({ type: "item", list: d.list, sec: d.sec, item: d.item });
+    if (a === "add-item") return openEdit({ type: "item", list: d.list, sec: d.sec, item: null });
+    if (a === "edit-sec") return openEdit({ type: "sec", list: d.list, sec: d.sec });
+    if (a === "edit-day") return openEdit({ type: "day", list: d.list });
+    if (a === "move") {
+      return mutate(d.list, (l) => {
+        const s = getSec(l, d.sec); const i = s.items.findIndex((x) => x.id === d.item); const j = i + Number(d.dir);
+        if (i < 0 || j < 0 || j >= s.items.length) return;
+        [s.items[i], s.items[j]] = [s.items[j], s.items[i]];
+      });
+    }
+    if (a === "add-sec") {
+      const sid = "s" + uid();
+      mutate(d.list, (l) => l.sections.push({ id: sid, title: "New section", items: [] }));
+      return openEdit({ type: "sec", list: d.list, sec: sid });
+    }
+    if (a === "add-day") {
+      const id = "d-" + uid();
+      const order = Math.max(0, ...state.lists.map((l) => l.order || 0)) + 1;
+      const l = { id, title: "New day", short: "New", dateLabel: "", isoDates: [], window: "", order, note: "", sections: [{ id: "s" + uid(), title: "Tasks", items: [] }] };
+      state.lists.push(l); save(l); state.sel = id; store.set("sel", id);
+      return openEdit({ type: "day", list: id });
+    }
+    if (a === "confirm") {
+      if (state.confirm !== d.key) { state.confirm = d.key; render(); return; }
+      state.confirm = null;
+      if (d.do === "del-item") { state.editing = null; return mutate(d.list, (l) => { const s = getSec(l, d.sec); s.items = s.items.filter((x) => x.id !== d.item); }); }
+      if (d.do === "del-sec") { state.editing = null; return mutate(d.list, (l) => { l.sections = l.sections.filter((s) => s.id !== d.sec); }); }
+      if (d.do === "reset") return mutate(d.list, (l) => l.sections.forEach((s) => s.items.forEach((x) => { x.done = false; })));
+      if (d.do === "del-day") { state.editing = null; state.sel = null; state.selInit = false; removeList(d.list).then(render); render(); return; }
+    }
+  });
+
+  document.addEventListener("change", (ev) => {
+    const t = ev.target;
+    if (t.id === "opt-edit") { state.edit = t.checked; store.set("edit", t.checked); state.editing = null; render(); return; }
+    if (t.id === "opt-hide") { state.hideDone = t.checked; store.set("hide", t.checked); render(); return; }
+    if (t.dataset.action === "toggle") {
+      const d = t.dataset, checked = t.checked;
+      mutate(d.list, (l) => { const it = getSec(l, d.sec).items.find((x) => x.id === d.item); if (it) it.done = checked; });
+    }
+  });
+
+  document.addEventListener("submit", (ev) => {
+    const f = ev.target; ev.preventDefault();
+    const d = f.dataset, v = (id) => (f.querySelector("#" + id) || {}).value || "";
+    if (d.form === "item") {
+      const text = v("ed-text").trim(); if (!text) return;
+      const fields = { time: v("ed-time").trim(), text, kind: v("ed-kind") === "break" ? "break" : "task", indent: f.querySelector("#ed-indent").checked ? 1 : 0 };
+      state.editing = null;
+      mutate(d.list, (l) => {
+        const s = getSec(l, d.sec);
+        if (d.item) Object.assign(s.items.find((x) => x.id === d.item), fields);
+        else s.items.push({ id: "i" + uid(), done: false, ...fields });
+      });
+    } else if (d.form === "sec") {
+      const title = v("sc-title").trim(); if (!title) return;
+      state.editing = null;
+      mutate(d.list, (l) => { getSec(l, d.sec).title = title; });
+    } else if (d.form === "day") {
+      const title = v("dy-title").trim(); if (!title) return;
+      const isoDates = v("dy-iso").split(",").map((x) => x.trim()).filter((x) => /^\d{4}-\d{2}-\d{2}$/.test(x));
+      state.editing = null;
+      mutate(d.list, (l) => Object.assign(l, { title, short: v("dy-short").trim() || title, dateLabel: v("dy-date").trim(), window: v("dy-window").trim(), note: v("dy-note").trim(), isoDates }));
+    }
+  });
+
+  document.addEventListener("keydown", (ev) => { if (ev.key === "Escape" && state.editing) closeEdit(); });
+
+  // ---------- data ----------
+  function applySnapshot(snap) {
+    const byId = new Map(snap.docs.map((doc) => [doc.id, doc]));
+    const next = [];
+    for (const doc of snap.docs) {
+      if (deleted.has(doc.id)) continue;
+      const local = getList(doc.id);
+      if (local && (pending.has(doc.id) || inflight.has(doc.id))) next.push(local);
+      else next.push({ id: doc.id, ...JSON.parse(JSON.stringify(doc.data() || {})) });
+    }
+    for (const l of state.lists) if (!byId.has(l.id) && (pending.has(l.id) || inflight.has(l.id))) next.push(l);
+    for (const l of next) { l.sections = Array.isArray(l.sections) ? l.sections : []; l.sections.forEach((s) => { s.items = Array.isArray(s.items) ? s.items : []; }); }
+    next.sort((a, b) => (a.order || 0) - (b.order || 0));
+    state.lists = next;
+    state.loaded = true;
+    if (document.querySelector("form.edit")) { renderTabs(); return; }
+    render();
+  }
+
+  const SEED = {"fri": {"title": "Friday: the Python the project needs", "short": "Fri", "dateLabel": "Nov 6", "isoDates": ["2026-11-06"], "window": "7:00–10:00 PM", "order": 3, "note": "", "sections": [{"id": "s46", "title": "Functions and classes", "items": [{"id": "i39", "kind": "task", "time": "7:00–7:25 PM", "text": "Read the [Python tutorial, section 4.8 onward](https://docs.python.org/3/tutorial/controlflow.html#more-on-defining-functions) (default and keyword arguments, `*args`, `**kwargs`, lambdas). Type out 3 examples.", "done": false, "indent": 0}, {"id": "i40", "kind": "task", "time": "7:25–7:50 PM", "text": "Read the [Python tutorial: Classes](https://docs.python.org/3/tutorial/classes.html), sections 9.3–9.5 only. Then write:", "done": false, "indent": 0}, {"id": "i41", "kind": "task", "time": "", "text": "A `Product` class with an `__init__` method and a `__repr__` method", "done": false, "indent": 1}, {"id": "i42", "kind": "task", "time": "", "text": "A `DigitalProduct(Product)` subclass that adds a `download_url` attribute", "done": false, "indent": 1}, {"id": "i43", "kind": "task", "time": "", "text": "A `@property` called `in_stock` that returns `stock > 0`", "done": false, "indent": 1}, {"id": "i44", "kind": "task", "time": "7:50–8:00 PM", "text": "Explain out loud: *what's the difference between a class and an instance?*", "done": false, "indent": 0}, {"id": "i45", "kind": "break", "time": "8:00–8:10 PM", "text": "Break. Step away from the screen.", "done": false, "indent": 0}]}, {"id": "s54", "title": "Modern Python features FastAPI uses", "items": [{"id": "i47", "kind": "task", "time": "8:10–8:30 PM", "text": "Read [FastAPI: Python Types Intro](https://fastapi.tiangolo.com/python-types/). Add type hints to your `Product` class.", "done": false, "indent": 0}, {"id": "i48", "kind": "task", "time": "8:30–8:50 PM", "text": "Read the first half of [Real Python: Primer on Python Decorators](https://realpython.com/primer-on-python-decorators/). Then write a `@timer` decorator that prints how long a function took to run.", "done": false, "indent": 0}, {"id": "i49", "kind": "task", "time": "8:50–9:10 PM", "text": "Exceptions:", "done": false, "indent": 0}, {"id": "i50", "kind": "task", "time": "", "text": "Write a function that raises `ValueError` when given a negative price", "done": false, "indent": 1}, {"id": "i51", "kind": "task", "time": "", "text": "Call it inside `try`/`except`/`finally` and print a friendly error message", "done": false, "indent": 1}, {"id": "i52", "kind": "task", "time": "", "text": "Create your own `OutOfStockError(Exception)` class and raise it", "done": false, "indent": 1}, {"id": "i53", "kind": "break", "time": "9:10–9:15 PM", "text": "Break. Step away from the screen.", "done": false, "indent": 0}]}, {"id": "s64", "title": "Modules, then the self-check", "items": [{"id": "i55", "kind": "task", "time": "9:15–9:30 PM", "text": "Make a `refresh_pkg/` package with `__init__.py`, `models.py` (your Product class) and `main.py` (imports Product and uses it). Run `python3 -m refresh_pkg.main` from the folder that contains `refresh_pkg`.", "done": false, "indent": 0}, {"id": "i56", "kind": "task", "time": "9:30–9:50 PM", "text": "**Self-check.** Write `selfcheck.py` with as few lookups as you can. It should:", "done": false, "indent": 0}, {"id": "i57", "kind": "task", "time": "", "text": "Define a `Product` class (name, price, stock) with type hints", "done": false, "indent": 1}, {"id": "i58", "kind": "task", "time": "", "text": "Store 4 products in a `dict[int, Product]`", "done": false, "indent": 1}, {"id": "i59", "kind": "task", "time": "", "text": "Find the products under $20 with a list comprehension", "done": false, "indent": 1}, {"id": "i60", "kind": "task", "time": "", "text": "Count the words in `\"the cat and the hat and the bat\"` with `Counter`", "done": false, "indent": 1}, {"id": "i61", "kind": "task", "time": "", "text": "Raise `ValueError` for a negative price, and catch it", "done": false, "indent": 1}, {"id": "i62", "kind": "task", "time": "9:50–9:55 PM", "text": "Score yourself. 0–2 lookups: you're ready. 3–5: fine, it will come back in Week 1. 6 or more: optionally redo Thursday's Block 2 this weekend (about 1 hour).", "done": false, "indent": 0}, {"id": "i63", "kind": "task", "time": "9:55–10:00 PM", "text": "Save the files: `git add . && git commit -m \"Friday Python refresh\"` and `git push`", "done": false, "indent": 0}]}]}, "ready": {"title": "Ready for Monday when", "short": "Ready?", "dateLabel": "Before Nov 9", "isoDates": [], "window": "", "order": 5, "note": "Tick these off before Week 1 starts.", "sections": [{"id": "s72", "title": "Checklist", "items": [{"id": "i67", "kind": "task", "time": "", "text": "Python, VS Code, Git and GitHub all work", "done": false, "indent": 0}, {"id": "i68", "kind": "task", "time": "", "text": "Your `python-refresh` repo has 3 days of pushes", "done": false, "indent": 0}, {"id": "i69", "kind": "task", "time": "", "text": "Your error log has entries", "done": false, "indent": 0}, {"id": "i70", "kind": "task", "time": "", "text": "The self-check script runs", "done": false, "indent": 0}, {"id": "i71", "kind": "task", "time": "", "text": "Next week's 7:00–10:00 PM sessions are on your calendar", "done": false, "indent": 0}]}]}, "thu": {"title": "Thursday: core Python and the interview toolkit", "short": "Thu", "dateLabel": "Nov 5", "isoDates": ["2026-11-05"], "window": "7:00–10:00 PM", "order": 2, "note": "Stuck on a problem for 8 minutes? Look at a hint, then finish it yourself.", "sections": [{"id": "s20", "title": "Syntax tour", "items": [{"id": "i17", "kind": "task", "time": "7:00–7:25 PM", "text": "Work through the first half of [Learn X in Y Minutes: Python](https://learnxinyminutes.com/docs/python/) (primitives, variables, lists, tuples, dicts, sets). Type the examples into `syntax.py` and run them.", "done": false, "indent": 0}, {"id": "i18", "kind": "task", "time": "7:25–7:50 PM", "text": "Do the second half the same way (control flow, functions, classes).", "done": false, "indent": 0}, {"id": "i19", "kind": "break", "time": "7:50–8:00 PM", "text": "Break. Step away from the screen.", "done": false, "indent": 0}]}, {"id": "s32", "title": "Python for coding interviews", "items": [{"id": "i21", "kind": "task", "time": "8:00–8:40 PM", "text": "Watch NeetCode's **Python for Coding Interviews** video on YouTube. Pause and type each example into `interview.py`.", "done": false, "indent": 0}, {"id": "i22", "kind": "task", "time": "8:40–9:00 PM", "text": "From memory, write one line for each of these, then run them:", "done": false, "indent": 0}, {"id": "i23", "kind": "task", "time": "", "text": "Reverse a list using slicing", "done": false, "indent": 1}, {"id": "i24", "kind": "task", "time": "", "text": "Sort a list of tuples by their second item, using `key=lambda`", "done": false, "indent": 1}, {"id": "i25", "kind": "task", "time": "", "text": "Write a dict comprehension that maps each word to its length", "done": false, "indent": 1}, {"id": "i26", "kind": "task", "time": "", "text": "Count the letters in `\"banana\"` with `Counter`", "done": false, "indent": 1}, {"id": "i27", "kind": "task", "time": "", "text": "Group words by their first letter with `defaultdict(list)`", "done": false, "indent": 1}, {"id": "i28", "kind": "task", "time": "", "text": "Append and pop from both ends of a `deque`", "done": false, "indent": 1}, {"id": "i29", "kind": "task", "time": "", "text": "Push 5 numbers onto a heap with `heapq` and pop the smallest", "done": false, "indent": 1}, {"id": "i30", "kind": "task", "time": "", "text": "Loop with `enumerate` and with `zip`", "done": false, "indent": 1}, {"id": "i31", "kind": "break", "time": "9:00–9:10 PM", "text": "Break. Step away from the screen.", "done": false, "indent": 0}]}, {"id": "s38", "title": "Warm-up problems", "items": [{"id": "i33", "kind": "task", "time": "9:10–9:20 PM", "text": "LeetCode **Reverse String**", "done": false, "indent": 0}, {"id": "i34", "kind": "task", "time": "9:20–9:30 PM", "text": "LeetCode **Valid Palindrome**", "done": false, "indent": 0}, {"id": "i35", "kind": "task", "time": "9:30–9:40 PM", "text": "LeetCode **Majority Element** (try solving it with `Counter`)", "done": false, "indent": 0}, {"id": "i36", "kind": "task", "time": "9:40–9:50 PM", "text": "LeetCode **Missing Number**", "done": false, "indent": 0}, {"id": "i37", "kind": "task", "time": "9:50–10:00 PM", "text": "Update your error log, then save today's files: `git add . && git commit -m \"Thursday Python refresh\"` and `git push`", "done": false, "indent": 0}]}]}, "w1-fri": {"title": "Week 1 · Friday: review and catch up", "short": "W1 Fri", "dateLabel": "Nov 13", "isoDates": ["2026-11-13"], "window": "7:00–10:00 PM", "order": 10, "note": "", "sections": [{"id": "w1s59", "title": "LeetCode review", "items": [{"id": "w1i58", "kind": "task", "time": "7:00–8:00 PM", "text": "Re-solve 2 or 3 problems from your error log **without looking at the solutions**", "done": false, "indent": 0}]}, {"id": "w1s66", "title": "Fundamentals review", "items": [{"id": "w1i60", "kind": "task", "time": "8:00–8:30 PM", "text": "Without notes, answer these out loud:", "done": false, "indent": 0}, {"id": "w1i61", "kind": "task", "time": "", "text": "What happens when I type a URL into the browser and press Enter?", "done": false, "indent": 1}, {"id": "w1i62", "kind": "task", "time": "", "text": "What's the difference between PUT and POST?", "done": false, "indent": 1}, {"id": "w1i63", "kind": "task", "time": "", "text": "What do 201, 404 and 422 mean?", "done": false, "indent": 1}, {"id": "w1i64", "kind": "task", "time": "", "text": "What is idempotency?", "done": false, "indent": 1}, {"id": "w1i65", "kind": "task", "time": "", "text": "Why use a virtual environment?", "done": false, "indent": 1}]}, {"id": "w1s70", "title": "Project: finish and document", "items": [{"id": "w1i67", "kind": "task", "time": "8:30–9:30 PM", "text": "Finish anything left over from this week", "done": false, "indent": 0}, {"id": "w1i68", "kind": "task", "time": "9:30–9:50 PM", "text": "Create `DECISIONS.md` and write your first entry: why FastAPI (validation, auto docs, async), the alternatives (Flask, Django) and the trade-off", "done": false, "indent": 0}, {"id": "w1i69", "kind": "task", "time": "9:50–10:00 PM", "text": "Commit and push. Week 1 done 🎉", "done": false, "indent": 0}]}]}, "w1-mon": {"title": "Week 1 · Monday: first endpoint", "short": "W1 Mon", "dateLabel": "Nov 9", "isoDates": ["2026-11-09"], "window": "7:00–10:00 PM", "order": 6, "note": "Week 1 goal: a small Python API that can create, list, update and delete products, saved on GitHub. Your tools are already installed, so the project starts at the virtual environment.", "sections": [{"id": "w1s4", "title": "LeetCode: arrays and hashing", "items": [{"id": "w1i1", "kind": "task", "time": "7:00–8:00 PM", "text": "Solve **Contains Duplicate** and **Valid Anagram**. Watch the NeetCode video on [neetcode.io](https://neetcode.io/roadmap) only after a real attempt.", "done": false, "indent": 0}, {"id": "w1i2", "kind": "task", "time": "", "text": "Log anything you missed in your error log", "done": false, "indent": 1}, {"id": "w1i3", "kind": "break", "time": "8:00–8:05 PM", "text": "Break. Step away from the screen.", "done": false, "indent": 0}]}, {"id": "w1s6", "title": "Fundamentals", "items": [{"id": "w1i5", "kind": "task", "time": "8:05–8:50 PM", "text": "Read [MDN: An overview of HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview). The goal: a *client* sends a *request* and a *server* sends back a *response*.", "done": false, "indent": 0}]}, {"id": "w1s13", "title": "Project: ShopFlow setup", "items": [{"id": "w1i7", "kind": "task", "time": "8:50–9:00 PM", "text": "Create a `shopflow` folder and a virtual environment: `python3 -m venv .venv`, then activate it (Mac/Linux: `source .venv/bin/activate`, Windows: `.venv\\Scripts\\activate`).", "done": false, "indent": 0}, {"id": "w1i8", "kind": "task", "time": "9:00–9:10 PM", "text": "Install FastAPI: `pip install \"fastapi[standard]\"`, then `pip freeze > requirements.txt`", "done": false, "indent": 0}, {"id": "w1i9", "kind": "task", "time": "9:10–9:25 PM", "text": "Create `app/main.py` with a FastAPI app and a `GET /health` endpoint that returns `{\"status\": \"ok\"}`. See [FastAPI: First Steps](https://fastapi.tiangolo.com/tutorial/first-steps/).", "done": false, "indent": 0}, {"id": "w1i10", "kind": "task", "time": "9:25–9:35 PM", "text": "Run `fastapi dev app/main.py`, then open http://127.0.0.1:8000/health and http://127.0.0.1:8000/docs", "done": false, "indent": 0}, {"id": "w1i11", "kind": "task", "time": "9:35–9:50 PM", "text": "Add a `.gitignore` with `.venv/` and `__pycache__/`. Run `git init`, `git add .`, `git commit -m \"Initial FastAPI app\"`, create an empty `shopflow` repo on GitHub and push.", "done": false, "indent": 0}, {"id": "w1i12", "kind": "task", "time": "9:50–10:00 PM", "text": "Explain out loud: what happens between typing a URL and seeing `{\"status\":\"ok\"}`?", "done": false, "indent": 0}]}]}, "w1-thu": {"title": "Week 1 · Thursday: organize the code", "short": "W1 Thu", "dateLabel": "Nov 12", "isoDates": ["2026-11-12"], "window": "7:00–10:00 PM", "order": 9, "note": "", "sections": [{"id": "w1s46", "title": "LeetCode: arrays and hashing", "items": [{"id": "w1i43", "kind": "task", "time": "7:00–8:00 PM", "text": "Solve **Longest Consecutive Sequence**. Watch the NeetCode video on [neetcode.io](https://neetcode.io/roadmap) only after a real attempt.", "done": false, "indent": 0}, {"id": "w1i44", "kind": "task", "time": "", "text": "Log anything you missed in your error log", "done": false, "indent": 1}, {"id": "w1i42", "kind": "task", "time": "", "text": "If time is left, re-solve one problem from your error log", "done": false, "indent": 1}, {"id": "w1i45", "kind": "break", "time": "8:00–8:05 PM", "text": "Break. Step away from the screen.", "done": false, "indent": 0}]}, {"id": "w1s49", "title": "Fundamentals", "items": [{"id": "w1i47", "kind": "task", "time": "8:05–8:25 PM", "text": "Read the illustrated [How DNS works](https://howdns.works/).", "done": false, "indent": 0}, {"id": "w1i48", "kind": "task", "time": "8:25–8:50 PM", "text": "Skim [what-happens-when](https://github.com/alex/what-happens-when) for the big picture: DNS, then TCP, then TLS, then the HTTP request and response.", "done": false, "indent": 0}]}, {"id": "w1s57", "title": "Project: project structure", "items": [{"id": "w1i50", "kind": "task", "time": "8:50–9:00 PM", "text": "Create `app/__init__.py`, `app/schemas.py` and `app/routers/__init__.py`, `app/routers/products.py`. See [FastAPI: Bigger Applications](https://fastapi.tiangolo.com/tutorial/bigger-applications/).", "done": false, "indent": 0}, {"id": "w1i51", "kind": "task", "time": "9:00–9:10 PM", "text": "Move `ProductCreate` and `Product` into `app/schemas.py`", "done": false, "indent": 0}, {"id": "w1i52", "kind": "task", "time": "9:10–9:30 PM", "text": "Move the product endpoints into `app/routers/products.py` using `APIRouter(prefix=\"/products\", tags=[\"products\"])`. Change paths to `\"\"` and `\"/{product_id}\"`.", "done": false, "indent": 0}, {"id": "w1i53", "kind": "task", "time": "9:30–9:35 PM", "text": "In `app/main.py`, keep `/health` and add `app.include_router(products.router)`", "done": false, "indent": 0}, {"id": "w1i54", "kind": "task", "time": "9:35–9:45 PM", "text": "Write `README.md`: what the project is, how to run it, and the list of endpoints", "done": false, "indent": 0}, {"id": "w1i55", "kind": "task", "time": "9:45–9:50 PM", "text": "Run the app, confirm everything still works, then commit and push", "done": false, "indent": 0}, {"id": "w1i56", "kind": "task", "time": "9:50–10:00 PM", "text": "Explain out loud: why split code into schemas and routers instead of one file?", "done": false, "indent": 0}]}]}, "w1-tue": {"title": "Week 1 · Tuesday: create and list products", "short": "W1 Tue", "dateLabel": "Nov 10", "isoDates": ["2026-11-10"], "window": "7:00–10:00 PM", "order": 7, "note": "", "sections": [{"id": "w1s17", "title": "LeetCode: arrays and hashing", "items": [{"id": "w1i14", "kind": "task", "time": "7:00–8:00 PM", "text": "Solve **Two Sum** and **Group Anagrams**. Watch the NeetCode video on [neetcode.io](https://neetcode.io/roadmap) only after a real attempt.", "done": false, "indent": 0}, {"id": "w1i15", "kind": "task", "time": "", "text": "Log anything you missed in your error log", "done": false, "indent": 1}, {"id": "w1i16", "kind": "break", "time": "8:00–8:05 PM", "text": "Break. Step away from the screen.", "done": false, "indent": 0}]}, {"id": "w1s19", "title": "Fundamentals", "items": [{"id": "w1i18", "kind": "task", "time": "8:05–8:50 PM", "text": "Read [MDN: HTTP request methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods) and [MDN: HTTP status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status). Learn **GET, POST, PUT, DELETE** and **200, 201, 204, 400, 404, 422, 500**.", "done": false, "indent": 0}]}, {"id": "w1s28", "title": "Project: products", "items": [{"id": "w1i20", "kind": "task", "time": "8:50–9:10 PM", "text": "Add Pydantic models: `ProductCreate` (name, description, price > 0, stock ≥ 0, using `Field`) and `Product` (adds `id`). See [FastAPI: Request Body](https://fastapi.tiangolo.com/tutorial/body/).", "done": false, "indent": 0}, {"id": "w1i21", "kind": "task", "time": "9:10–9:30 PM", "text": "Store products in an in-memory `dict[int, Product]`. Add `POST /products` (returns 201) and `GET /products`.", "done": false, "indent": 0}, {"id": "w1i22", "kind": "task", "time": "9:30–9:45 PM", "text": "Test at `/docs`:", "done": false, "indent": 0}, {"id": "w1i23", "kind": "task", "time": "", "text": "Create 2 or 3 products", "done": false, "indent": 1}, {"id": "w1i24", "kind": "task", "time": "", "text": "List them with GET /products", "done": false, "indent": 1}, {"id": "w1i25", "kind": "task", "time": "", "text": "Send `\"price\": -5` and see the **422** validation error", "done": false, "indent": 1}, {"id": "w1i26", "kind": "task", "time": "9:45–9:50 PM", "text": "Commit and push: `git add . && git commit -m \"Add create and list products\"` then `git push`", "done": false, "indent": 0}, {"id": "w1i27", "kind": "task", "time": "9:50–10:00 PM", "text": "Explain out loud: why does a negative price return 422 and not 500?", "done": false, "indent": 0}]}]}, "w1-wed": {"title": "Week 1 · Wednesday: get, update, delete", "short": "W1 Wed", "dateLabel": "Nov 11", "isoDates": ["2026-11-11"], "window": "7:00–10:00 PM", "order": 8, "note": "", "sections": [{"id": "w1s32", "title": "LeetCode: arrays and hashing", "items": [{"id": "w1i29", "kind": "task", "time": "7:00–8:00 PM", "text": "Solve **Top K Frequent Elements** and **Product of Array Except Self**. Watch the NeetCode video on [neetcode.io](https://neetcode.io/roadmap) only after a real attempt.", "done": false, "indent": 0}, {"id": "w1i30", "kind": "task", "time": "", "text": "Log anything you missed in your error log", "done": false, "indent": 1}, {"id": "w1i31", "kind": "break", "time": "8:00–8:05 PM", "text": "Break. Step away from the screen.", "done": false, "indent": 0}]}, {"id": "w1s34", "title": "Fundamentals", "items": [{"id": "w1i33", "kind": "task", "time": "8:05–8:50 PM", "text": "Read about REST and idempotency on [restfulapi.net](https://restfulapi.net/). Key idea: GET, PUT and DELETE are idempotent, POST is not.", "done": false, "indent": 0}]}, {"id": "w1s41", "title": "Project: full CRUD", "items": [{"id": "w1i35", "kind": "task", "time": "8:50–9:05 PM", "text": "Add `GET /products/{product_id}` that raises `HTTPException(status_code=404)` when the product doesn't exist. See [FastAPI: Handling Errors](https://fastapi.tiangolo.com/tutorial/handling-errors/).", "done": false, "indent": 0}, {"id": "w1i36", "kind": "task", "time": "9:05–9:20 PM", "text": "Add `PUT /products/{product_id}` to replace a product (404 if missing).", "done": false, "indent": 0}, {"id": "w1i37", "kind": "task", "time": "9:20–9:30 PM", "text": "Add `DELETE /products/{product_id}` that returns **204** (404 if missing).", "done": false, "indent": 0}, {"id": "w1i38", "kind": "task", "time": "9:30–9:45 PM", "text": "Test all 5 operations at `/docs`, then create one product from the terminal with `curl -X POST http://127.0.0.1:8000/products -H \"Content-Type: application/json\" -d '{\"name\":\"Mug\",\"price\":12.5,\"stock\":10}'`", "done": false, "indent": 0}, {"id": "w1i39", "kind": "task", "time": "9:45–9:50 PM", "text": "Commit and push", "done": false, "indent": 0}, {"id": "w1i40", "kind": "task", "time": "9:50–10:00 PM", "text": "Explain out loud: what's the difference between PUT and POST, and which one is idempotent?", "done": false, "indent": 0}]}]}, "w1-weekend": {"title": "Week 1 · Weekend: buffer", "short": "W1 Sat–Sun", "dateLabel": "Nov 14–15", "isoDates": ["2026-11-14", "2026-11-15"], "window": "Free", "order": 11, "note": "", "sections": [{"id": "w1s73", "title": "Buffer", "items": [{"id": "w1i71", "kind": "task", "time": "", "text": "Only if you're behind: finish this week's unticked tasks", "done": false, "indent": 0}, {"id": "w1i72", "kind": "task", "time": "", "text": "Otherwise rest. Week 2 (moving to PostgreSQL) starts Monday, Nov 16.", "done": false, "indent": 0}]}]}, "wed": {"title": "Wednesday: tools, accounts and a warm-up", "short": "Wed", "dateLabel": "Nov 4", "isoDates": ["2026-11-04"], "window": "7:00–9:00 PM", "order": 1, "note": "Running late? Shift every time by the same amount. If time runs short, finish the installs and accounts (up to 8:35 PM) and leave the rest for tomorrow.", "sections": [{"id": "s4", "title": "Install your tools", "items": [{"id": "i1", "kind": "task", "time": "7:00–7:15 PM", "text": "Install Python 3.12 or newer from [python.org](https://www.python.org/downloads/). Check it with `python3 --version`. On Windows, tick **Add Python to PATH** during the install.", "done": false, "indent": 0}, {"id": "i2", "kind": "task", "time": "7:15–7:30 PM", "text": "Install [VS Code](https://code.visualstudio.com/) and its **Python** extension (published by Microsoft).", "done": false, "indent": 0}, {"id": "i3", "kind": "task", "time": "7:30–7:45 PM", "text": "Install [Git](https://git-scm.com/downloads) and check it with `git --version`. Then set your identity: `git config --global user.name \"Your Name\"` and `git config --global user.email \"you@example.com\"`", "done": false, "indent": 0}]}, {"id": "s8", "title": "Create your accounts", "items": [{"id": "i5", "kind": "task", "time": "7:45–8:00 PM", "text": "Create a [GitHub](https://github.com) account, or log in to your existing one. Turn on two-factor authentication.", "done": false, "indent": 0}, {"id": "i6", "kind": "task", "time": "8:00–8:10 PM", "text": "Create accounts on [LeetCode](https://leetcode.com) and [neetcode.io](https://neetcode.io). Bookmark the **NeetCode 150** roadmap.", "done": false, "indent": 0}, {"id": "i7", "kind": "break", "time": "8:10–8:15 PM", "text": "Break. Step away from the screen.", "done": false, "indent": 0}]}, {"id": "s12", "title": "Test that everything works together", "items": [{"id": "i9", "kind": "task", "time": "8:15–8:25 PM", "text": "Create a `python-refresh/` folder and open it in VS Code. Add `hello.py` containing `print(\"Hello, ShopFlow!\")`, then run `python3 hello.py`.", "done": false, "indent": 0}, {"id": "i10", "kind": "task", "time": "8:25–8:35 PM", "text": "Create a `python-refresh` repo on GitHub, then push `hello.py` using the commands GitHub shows you.", "done": false, "indent": 0}, {"id": "i11", "kind": "task", "time": "8:35–8:40 PM", "text": "Create your **error log** with these columns: *Problem, Pattern, What I missed, Key insight*.", "done": false, "indent": 0}]}, {"id": "s16", "title": "Warm-up", "items": [{"id": "i13", "kind": "task", "time": "8:40–8:48 PM", "text": "LeetCode **Fizz Buzz**", "done": false, "indent": 0}, {"id": "i14", "kind": "task", "time": "8:48–8:55 PM", "text": "LeetCode **Running Sum of 1d Array**", "done": false, "indent": 0}, {"id": "i15", "kind": "task", "time": "8:55–9:00 PM", "text": "Put study time on your calendar: Thursday and Friday 7:00–10:00 PM, and Monday to Friday 7:00–10:00 PM next week.", "done": false, "indent": 0}]}]}, "weekend": {"title": "Saturday and Sunday: rest", "short": "Sat–Sun", "dateLabel": "Nov 7–8", "isoDates": ["2026-11-07", "2026-11-08"], "window": "Free", "order": 4, "note": "", "sections": [{"id": "s66", "title": "Rest", "items": [{"id": "i65", "kind": "task", "time": "", "text": "Nothing planned. Week 1 starts **Monday, Nov 9 at 7:00 PM**.", "done": false, "indent": 0}]}]}};
+  const LS = "prep:lists:v1";
+  let mem;
+  try { const v = localStorage.getItem(LS); mem = v ? JSON.parse(v) : null; } catch { mem = null; }
+  if (!mem || typeof mem !== "object") mem = JSON.parse(JSON.stringify(SEED));
+  function persist() { try { localStorage.setItem(LS, JSON.stringify(mem)); return true; } catch { return false; } }
+  const snapOf = () => ({ metadata: { fromCache: false }, docs: Object.entries(mem).map(([id, d]) => ({ id, data: () => d })) });
+  const localDb = {
+    doc(path) {
+      const id = path.split("/")[1];
+      return {
+        async set(d) { mem[id] = d; if (!persist()) throw { code: "unavailable" }; },
+        async delete() { delete mem[id]; persist(); },
+      };
+    },
+  };
+  function reload() { state.selInit = false; state.editing = null; applySnapshot(snapOf()); }
+
+  $("#btn-export").addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify(mem, null, 1)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "prep-checklist-progress-" + todayISO() + ".json";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    setStatus("Progress exported");
+  });
+  $("#btn-import").addEventListener("click", () => $("#file-import").click());
+  $("#file-import").addEventListener("change", async (ev) => {
+    const file = ev.target.files[0]; ev.target.value = "";
+    if (!file) return;
+    try {
+      const data = JSON.parse(await file.text());
+      const ok = data && typeof data === "object" && !Array.isArray(data) && Object.values(data).every((l) => l && Array.isArray(l.sections));
+      if (!ok) throw new Error("bad");
+      mem = data; persist(); reload(); setStatus("Progress imported");
+    } catch { setStatus("That file isn't a checklist export. Choose a file made with Export progress.", true); }
+  });
+
+  function start() {
+    state.db = localDb;
+    if (!persist()) setStatus("This browser isn't saving data (private window?). Changes will be lost when you close it.", true);
+    reload();
+  }
+  start();
+})();
+</script>
+</body>
+</html>
