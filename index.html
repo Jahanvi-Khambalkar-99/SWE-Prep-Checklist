@@ -10,20 +10,20 @@
 <style>
 /* Layout: one narrow study column. Header with overall progress, day tabs, then the selected day's blocks as a timed checklist. */
 :root {
-  --bg: #fff3fa;
+  --bg: #f0fbfa;
   --surface: #ffffff;
   --ink: #1d3a8f;
   --muted: #5068a6;
-  --line: #f4d3ea;
-  --accent: #d81f78;
+  --line: #cdeeea;
+  --accent: #0b7f7c;
   --accent-ink: #ffffff;
-  --accent-soft: #ffe1f0;
+  --accent-soft: #d6f6f2;
   --warn: #c2410c;
-  --code-bg: #f6e8ff;
-  --grad: linear-gradient(90deg, #ff4f9a, #ff9f43, #ffd23f);
-  --bubble-1: #ffd6ec;
-  --bubble-2: #e4d9ff;
-  --bubble-3: #fff0b8;
+  --code-bg: #e4f3fa;
+  --grad: linear-gradient(90deg, #19d3c5, #6fdc7a, #c4ef5a);
+  --bubble-1: #def7f3;
+  --bubble-2: #e8f0ff;
+  --bubble-3: #f2fbdc;
   --font-display: "Fredoka", "Nunito", "Segoe UI", sans-serif;
   --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -31,18 +31,18 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #1c0f26; --surface: #2a1838; --ink: #cfe0ff; --muted: #9db4e6; --line: #48295a;
-    --accent: #ff70b3; --accent-ink: #2a0b1e; --accent-soft: #4a1d40; --warn: #ff9a6b; --code-bg: #3a2250;
-    --grad: linear-gradient(90deg, #ff5fa6, #ffa75a, #ffd95e);
-    --bubble-1: #3a1838; --bubble-2: #2b1f4d; --bubble-3: #3a2a1a;
+    --bg: #0c1a22; --surface: #13262f; --ink: #cfe0ff; --muted: #9db4e6; --line: #224450;
+    --accent: #3ee0d0; --accent-ink: #04201d; --accent-soft: #113a3a; --warn: #ff9a6b; --code-bg: #1a3440;
+    --grad: linear-gradient(90deg, #22d6c6, #79e07a, #c9f25f);
+    --bubble-1: #10282c; --bubble-2: #14243a; --bubble-3: #1a2a1c;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #1c0f26; --surface: #2a1838; --ink: #cfe0ff; --muted: #9db4e6; --line: #48295a;
-  --accent: #ff70b3; --accent-ink: #2a0b1e; --accent-soft: #4a1d40; --warn: #ff9a6b; --code-bg: #3a2250;
-  --grad: linear-gradient(90deg, #ff5fa6, #ffa75a, #ffd95e);
-  --bubble-1: #3a1838; --bubble-2: #2b1f4d; --bubble-3: #3a2a1a;
+  --bg: #0c1a22; --surface: #13262f; --ink: #cfe0ff; --muted: #9db4e6; --line: #224450;
+  --accent: #3ee0d0; --accent-ink: #04201d; --accent-soft: #113a3a; --warn: #ff9a6b; --code-bg: #1a3440;
+  --grad: linear-gradient(90deg, #22d6c6, #79e07a, #c9f25f);
+  --bubble-1: #10282c; --bubble-2: #14243a; --bubble-3: #1a2a1c;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -50,10 +50,9 @@ body {
   margin: 0;
   background: var(--bg); color: var(--ink);
   background-image:
-    radial-gradient(circle at 6% 10%, var(--bubble-1) 0 110px, transparent 111px),
-    radial-gradient(circle at 94% 4%, var(--bubble-2) 0 150px, transparent 151px),
-    radial-gradient(circle at 90% 62%, var(--bubble-3) 0 80px, transparent 81px),
-    radial-gradient(circle at 4% 78%, var(--bubble-2) 0 60px, transparent 61px);
+    radial-gradient(circle at 5% 9%, var(--bubble-1) 0 64px, transparent 65px),
+    radial-gradient(circle at 95% 4%, var(--bubble-2) 0 90px, transparent 91px),
+    radial-gradient(circle at 92% 66%, var(--bubble-3) 0 46px, transparent 47px);
   background-attachment: fixed;
   font-family: var(--font-body); font-size: 15px; line-height: 1.55;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
