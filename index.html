@@ -69,22 +69,10 @@ button, input, textarea, select { font: inherit; color: inherit; }
 .top { display: grid; gap: 12px; }
 .eyebrow { margin: 0; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
 h1 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: clamp(28px, 6vw, 40px); line-height: 1.1; text-wrap: balance; }
-.overall {
-  display: grid; gap: 10px; padding: 16px 18px; border-radius: 22px;
-  background: var(--surface); border: 2px solid color-mix(in srgb, var(--accent) 35%, var(--line));
-  box-shadow: 0 12px 28px -14px color-mix(in srgb, var(--accent) 60%, transparent);
-}
-.overall .bar { height: 20px; background: var(--accent-soft); box-shadow: inset 0 2px 4px color-mix(in srgb, var(--ink) 12%, transparent); }
-.overall .bar > span {
-  background: repeating-linear-gradient(45deg, rgba(255,255,255,.28) 0 10px, transparent 10px 20px), var(--grad);
-  background-size: 28px 28px, 100% 100%;
-  box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 55%, transparent);
-  animation: stripes 1.4s linear infinite;
-}
-@keyframes stripes { to { background-position: 28px 0, 0 0; } }
+.overall { display: grid; gap: 6px; }
 .bar { height: 10px; background: var(--line); border-radius: 99px; overflow: hidden; }
 .bar > span { display: block; height: 100%; width: 0; background: var(--grad); border-radius: 99px; transition: width .3s ease; }
-.overall p { margin: 0; color: var(--ink); font-family: var(--font-display); font-weight: 600; font-size: 17px; font-variant-numeric: tabular-nums; }
+.overall p { margin: 0; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
 .toolbar { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; }
 .switch { display: inline-flex; gap: 8px; align-items: center; font-size: 14px; cursor: pointer; user-select: none; }
 .switch input { width: 16px; height: 16px; accent-color: var(--accent); }
