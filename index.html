@@ -10,20 +10,20 @@
 <style>
 /* Layout: one narrow study column. Header with overall progress, day tabs, then the selected day's blocks as a timed checklist. */
 :root {
-  --bg: #f0fbfa;
+  --bg: #fff3fa;
   --surface: #ffffff;
   --ink: #1d3a8f;
   --muted: #5068a6;
-  --line: #cdeeea;
-  --accent: #0b7f7c;
+  --line: #f4d3ea;
+  --accent: #d81f78;
   --accent-ink: #ffffff;
-  --accent-soft: #d6f6f2;
+  --accent-soft: #ffe1f0;
   --warn: #c2410c;
-  --code-bg: #e4f3fa;
-  --grad: linear-gradient(90deg, #19d3c5, #6fdc7a, #c4ef5a);
-  --bubble-1: #def7f3;
-  --bubble-2: #e8f0ff;
-  --bubble-3: #f2fbdc;
+  --code-bg: #f6e8ff;
+  --grad: linear-gradient(90deg, #ff4f9a, #ff9f43, #ffd23f);
+  --bubble-1: #ffe6f3;
+  --bubble-2: #eee7ff;
+  --bubble-3: #fff6d6;
   --font-display: "Fredoka", "Nunito", "Segoe UI", sans-serif;
   --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -31,18 +31,18 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0c1a22; --surface: #13262f; --ink: #cfe0ff; --muted: #9db4e6; --line: #224450;
-    --accent: #3ee0d0; --accent-ink: #04201d; --accent-soft: #113a3a; --warn: #ff9a6b; --code-bg: #1a3440;
-    --grad: linear-gradient(90deg, #22d6c6, #79e07a, #c9f25f);
-    --bubble-1: #10282c; --bubble-2: #14243a; --bubble-3: #1a2a1c;
+    --bg: #1c0f26; --surface: #2a1838; --ink: #cfe0ff; --muted: #9db4e6; --line: #48295a;
+    --accent: #ff70b3; --accent-ink: #2a0b1e; --accent-soft: #4a1d40; --warn: #ff9a6b; --code-bg: #3a2250;
+    --grad: linear-gradient(90deg, #ff5fa6, #ffa75a, #ffd95e);
+    --bubble-1: #2c1534; --bubble-2: #261a3f; --bubble-3: #2e2120;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0c1a22; --surface: #13262f; --ink: #cfe0ff; --muted: #9db4e6; --line: #224450;
-  --accent: #3ee0d0; --accent-ink: #04201d; --accent-soft: #113a3a; --warn: #ff9a6b; --code-bg: #1a3440;
-  --grad: linear-gradient(90deg, #22d6c6, #79e07a, #c9f25f);
-  --bubble-1: #10282c; --bubble-2: #14243a; --bubble-3: #1a2a1c;
+  --bg: #1c0f26; --surface: #2a1838; --ink: #cfe0ff; --muted: #9db4e6; --line: #48295a;
+  --accent: #ff70b3; --accent-ink: #2a0b1e; --accent-soft: #4a1d40; --warn: #ff9a6b; --code-bg: #3a2250;
+  --grad: linear-gradient(90deg, #ff5fa6, #ffa75a, #ffd95e);
+  --bubble-1: #2c1534; --bubble-2: #261a3f; --bubble-3: #2e2120;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
